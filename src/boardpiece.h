@@ -7,14 +7,12 @@ class Piece {
         int x;
         int y;
         char type;
-        bool isCaptured;
 
     public:
         char getType() {return type;}
         char getColor() {return color;}
         int getX() {return x;}
         int getY() {return y;}
-        void capture() {isCaptured = true;}
         Piece(char pcolor, int ix, int iy, char ptype);
 
 };
@@ -22,7 +20,6 @@ class Piece {
 class Board {
     private:
         Piece *squares[8][8];
-        Piece *piecelist[32];
 
     public:
         bool isOccupied(int x, int y);
@@ -33,6 +30,8 @@ class Board {
         void initBoard();
         void initPieces();
         void printBoard();
+        int movePiece(int x, int y, int dx, int dy);
+        int makeCloser(int a, int b);
         Board();
 };
 
