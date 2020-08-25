@@ -273,16 +273,7 @@ int Board::movePiece(int x, int y, int dx, int dy) {
                             return 0;
                         }
 
-                        else {
-                            for (int i = (y + 1); i != dy; i++) {
-                                if (isOccupied(x, i)) {
-                                    return 1;
-                                }
-
-                                else {
-                                    continue;
-                                }
-                            }
+                        else if (dy - y == 1) {
                             if (isOccupied(dx, dy)) {
                                 return 1;
                             }
@@ -291,9 +282,26 @@ int Board::movePiece(int x, int y, int dx, int dy) {
                             return 0;
 
                         }
+
+                        else {return 1;}
                     }
 
+                    else if (dx - x == 1 || dx - x == -1) {
+                        if (dy - y == 1) {
+                            if (isOccupied(dx, dy) && getColor(dx, dy) != pcolor) {
+                                capture(dx, dy);
+                                
+                                squares[dx][dy] = squares[x][y];
+                                squares[x][y] = nullptr;
+                                return 0;
+                            }
+                            else {return 1;}
+                        }
 
+                        else {return 1;}
+                    }
+
+                    else {return 1;}
                 }
             }
         }
@@ -331,7 +339,6 @@ int Board::movePiece(int x, int y, int dx, int dy) {
                         capture(dx, dy);
                     }
 
-                    else {return 1;}
 
                     squares[dx][dy] = squares[x][y];
                     squares[x][y] = nullptr;
@@ -341,7 +348,7 @@ int Board::movePiece(int x, int y, int dx, int dy) {
                 else if (dy == y) {
 
                     if (x < dx) {
-                        for (int i = x; i != dx; i++) {
+                        for (int i = x + 1; i != dx; i++) {
                             if (isOccupied(i, y)) {
                                 return 1;
                             }
@@ -353,7 +360,7 @@ int Board::movePiece(int x, int y, int dx, int dy) {
                     }
                     
                     else {
-                        for (int i = x; i != dx; i--) {
+                        for (int i = x - 1; i != dx; i--) {
                             if (isOccupied(i, y)) {
                                 return 1;
                             }
