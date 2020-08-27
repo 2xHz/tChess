@@ -165,151 +165,112 @@ int Board::movePiece(int x, int y, int dx, int dy) {
         char ptype = squares[x][y]->getType();
         char pcolor = squares[x][y]->getColor();
 
-        if (pcolor == 'W') {
-            if (ptype == 'R') {
-                if (dx == x) {
-                    if (y < dy) {
-                        for (int i = (y + 1); i != dy; i++) {
-                            if (isOccupied(x, i)) {
-                                return 1;
-                            }
+        // White pieces
+        if (ptype == 'R' || ptype == 'r') {
 
-                            else {
-                                continue;
-                            }
-                        }
-                    }
-
-                    else {
-                        for (int i = (y + 1); i != dy; i--) {
-                            if (isOccupied(x, i)) {
-                                return 1;
-                            }
-
-                            else {
-                                continue;
-                            }
-                        }
-                    }
-
-                    // check if move makes puts either king in check...
-
-                    if (isOccupied(dx, dy) && getColor(dx, dy) != pcolor) {
-                        capture(dx, dy);
-                    }
-
-                    else {return 1;}
-
-                    squares[dx][dy] = squares[x][y];
-                    squares[x][y] = nullptr;
-                    return 0;
-                }
-
-                else if (dy == y) {
-
-                    if (x < dx) {
-                        for (int i = x + 1; i != dx; i++) {
-                            if (isOccupied(i, y)) {
-                                return 1;
-                            }
-
-                            else {
-                                continue;
-                            }
-                        }
-                    }
-                    
-                    else {
-                        for (int i = x - 1; i != dx; i--) {
-                            if (isOccupied(i, y)) {
-                                return 1;
-                            }
-
-                            else {
-                                continue;
-                            }
-                        }
-                    }
-
-                    // check if move makes puts either king in check...
-
-                    if (isOccupied(dx, dy)) {
-                        if (getColor(dx, dy) == pcolor) {
+            // Vertical movement
+            if (dx == x) {
+                // Moving up
+                if (y < dy) {
+                    for (int i = (y + 1); i != dy; i++) {
+                        if (isOccupied(x, i)) {
                             return 1;
                         }
 
-                        else {capture(dx, dy);}
+                        else {
+                            continue;
+                        }
                     }
-
-                    squares[dx][dy] = squares[x][y];
-                    squares[x][y] = nullptr;
-                    return 0;
                 }
 
+                // Moving down
                 else {
-                    return 1;
+                    for (int i = (y + 1); i != dy; i--) {
+                        if (isOccupied(x, i)) {
+                            return 1;
+                        }
+
+                        else {
+                            continue;
+                        }
+                    }
                 }
+
+                // TODO: check if move puts either king in check...
+
+                // If opposite color piece is there capture it
+                if (isOccupied(dx, dy)) {
+                    if (getColor(dx, dy) != pcolor) {
+                        capture(dx, dy);
+                    }
+                    else {
+                        return 1;
+                    }
+                }
+
+                // Actually move the piece
+                squares[dx][dy] = squares[x][y];
+                squares[x][y] = nullptr;
+                return 0;
             }
 
-            else if (ptype == 'P') {
-                if (dx == x || (((x - dx == 1) || (x - dx == -1)) && ((y - dy == 1) || (y - dy == -1)))) {
-                    if (x == dx) {
-                        if (y == 1 && dy == 3) {
-                            for (int i = (y + 1); i != dy; i++) {
-                                if (isOccupied(x, i)) {
-                                    return 1;
-                                }
-
-                                else {
-                                    continue;
-                                }
-                            }
-
-                            if (isOccupied(dx, dy)) {
-                                return 1;
-                            }
-                            squares[dx][dy] = squares[x][y];
-                            squares[x][y] = nullptr;
-                            return 0;
+            // Horizontal move
+            else if (dy == y) {
+                // Moving right
+                if (x < dx) {
+                    // Check if another piece is in the way
+                    for (int i = x + 1; i != dx; i++) {
+                        if (isOccupied(i, y)) {
+                            return 1;
                         }
 
-                        else if (dy - y == 1) {
-                            if (isOccupied(dx, dy)) {
-                                return 1;
-                            }
-                            squares[dx][dy] = squares[x][y];
-                            squares[x][y] = nullptr;
-                            return 0;
-
+                        else {
+                            continue;
                         }
-
-                        else {return 1;}
                     }
-
-                    else if (dx - x == 1 || dx - x == -1) {
-                        if (dy - y == 1) {
-                            if (isOccupied(dx, dy) && getColor(dx, dy) != pcolor) {
-                                capture(dx, dy);
-                                
-                                squares[dx][dy] = squares[x][y];
-                                squares[x][y] = nullptr;
-                                return 0;
-                            }
-                            else {return 1;}
-                        }
-
-                        else {return 1;}
-                    }
-
-                    else {return 1;}
                 }
+                
+                // Moving left
+                else {
+                    // Check if another piece is in the way
+                    for (int i = x - 1; i != dx; i--) {
+                        if (isOccupied(i, y)) {
+                            return 1;
+                        }
+
+                        else {
+                            continue;
+                        }
+                    }
+                }
+
+                // TODO: check if move puts either king in check...
+
+                // If opposite color piece is there capture it
+                if (isOccupied(dx, dy)) {
+                    if (getColor(dx, dy) != pcolor) {
+                        capture(dx, dy);
+                    }
+                    else {
+                        return 1;
+                    }
+                }
+
+                // Actually move the piece
+                squares[dx][dy] = squares[x][y];
+                squares[x][y] = nullptr;
+                return 0;
+            }
+
+            else {
+                return 1;
             }
         }
 
-        else {
-            if (ptype == 'r') {
-                if (dx == x) {
-                    if (y < dy) {
+        else if (ptype == 'P') {
+            if (dx == x || (((x - dx == 1) || (x - dx == -1)) && ((y - dy == 1) || (y - dy == -1)))) {
+                if (x == dx) {
+                    if (y == 1 && dy == 3) {
                         for (int i = (y + 1); i != dy; i++) {
                             if (isOccupied(x, i)) {
                                 return 1;
@@ -319,76 +280,44 @@ int Board::movePiece(int x, int y, int dx, int dy) {
                                 continue;
                             }
                         }
-                    }
 
-                    else {
-                        for (int i = (y - 1); i != dy; i--) {
-                            if (isOccupied(x, i)) {
-                                return 1;
-                            }
-
-                            else {
-                                continue;
-                            }
-                        }
-                    }
-
-                    // check if move makes puts either king in check...
-
-                    if (isOccupied(dx, dy) && getColor(dx, dy) != pcolor) {
-                        capture(dx, dy);
-                    }
-
-
-                    squares[dx][dy] = squares[x][y];
-                    squares[x][y] = nullptr;
-                    return 0;
-                }
-
-                else if (dy == y) {
-
-                    if (x < dx) {
-                        for (int i = x + 1; i != dx; i++) {
-                            if (isOccupied(i, y)) {
-                                return 1;
-                            }
-
-                            else {
-                                continue;
-                            }
-                        }
-                    }
-                    
-                    else {
-                        for (int i = x - 1; i != dx; i--) {
-                            if (isOccupied(i, y)) {
-                                return 1;
-                            }
-
-                            else {
-                                continue;
-                            }
-                        }
-                    }
-
-                    // check if move makes puts either king in check...
-
-                    if (isOccupied(dx, dy)) {
-                        if (getColor(dx, dy) == pcolor) {
+                        if (isOccupied(dx, dy)) {
                             return 1;
                         }
-
-                        else {capture(dx, dy);}
+                        squares[dx][dy] = squares[x][y];
+                        squares[x][y] = nullptr;
+                        return 0;
                     }
 
-                    squares[dx][dy] = squares[x][y];
-                    squares[x][y] = nullptr;
-                    return 0;
+                    else if (dy - y == 1) {
+                        if (isOccupied(dx, dy)) {
+                            return 1;
+                        }
+                        squares[dx][dy] = squares[x][y];
+                        squares[x][y] = nullptr;
+                        return 0;
+
+                    }
+
+                    else {return 1;}
                 }
 
-                else {
-                    return 1;
+                else if (dx - x == 1 || dx - x == -1) {
+                    if (dy - y == 1) {
+                        if (isOccupied(dx, dy) && getColor(dx, dy) != pcolor) {
+                            capture(dx, dy);
+                            
+                            squares[dx][dy] = squares[x][y];
+                            squares[x][y] = nullptr;
+                            return 0;
+                        }
+                        else {return 1;}
+                    }
+
+                    else {return 1;}
                 }
+
+                else {return 1;}
             }
         }
     }
