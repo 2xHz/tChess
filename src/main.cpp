@@ -1,4 +1,4 @@
-#include "boardpiece.h"
+#include "boardpiece.hpp"
 #include <iostream>
 
 using namespace std;

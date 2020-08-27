@@ -1,6 +1,6 @@
 #include <iostream>
 #include <algorithm>
-#include "boardpiece.h"
+#include "boardpiece.hpp"
 
 using namespace std;
 
