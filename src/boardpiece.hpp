@@ -13,6 +13,8 @@ class Piece {
         char getColor() {return color;}
         int getX() {return x;}
         int getY() {return y;}
+        void setX(int dx) {x = dx;}
+        void setY(int dy) {y = dy;}
         Piece(char pcolor, int ix, int iy, char ptype);
 
 };
